@@ -1,7 +1,11 @@
 package com.cailh.controller;
 
+
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 /*
@@ -9,13 +13,14 @@ import org.springframework.context.annotation.ComponentScan;
 */
 @SpringBootApplication
 @ComponentScan(basePackages = "com.cailh")
+@EnableAutoConfiguration(exclude={
+        JpaRepositoriesAutoConfiguration.class//禁止springboot自动加载持久化bean
+})
 public class Entry {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Entry.class, args);
-        /*
-        * 数据库一直报错
-        * 报错提示：Unable to create initial connections of pool.
-        *java.sql.SQLException: Access denied for user 'cailh'@'localhost' (using password: YES)
-        */
+        ApplicationContext ctx = SpringApplication.run(Entry.class, args);
+
     }
+
+
 }

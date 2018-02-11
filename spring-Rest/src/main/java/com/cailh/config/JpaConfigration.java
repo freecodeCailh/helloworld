@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(basePackages = "com.cailh.respository")
-@EntityScan(basePackages = "com.cailh.config")
+@EntityScan(basePackages = "com.cailh.User")
 public class JpaConfigration {
     @Bean
     PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){

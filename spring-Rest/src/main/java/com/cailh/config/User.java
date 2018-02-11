@@ -1,24 +1,38 @@
 package com.cailh.config;
 
-import javax.persistence.*;
+
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "tbl_user")
 public class User
 {
+    public User(){}
+    public User(int idin,String namein  ,String passwordin)
+    {
+        this.name=namein;
+        this.id=idin;
+        this.password=passwordin;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private String name;
 
     private String password;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

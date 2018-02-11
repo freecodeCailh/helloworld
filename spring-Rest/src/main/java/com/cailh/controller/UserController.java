@@ -2,52 +2,83 @@ package com.cailh.controller;
 
 
 import com.cailh.config.User;
-import com.cailh.respositoty.UserRespositoty;
+import com.cailh.respositoty.userRepositoty;
 import com.cailh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+
 
 /*
 * User 控制层
 */
-@Controller
+@RestController
 @RequestMapping(value = "/user")
-public class UserController {
-    @Autowired
-    private UserService userService;
+public  class UserController {
+
+    public UserService userService;
+
+
+    private userRepositoty userRepositoty;
 
     @RequestMapping(value = "/index")
-    public String index(){
-        return "user/index";
+    @ResponseBody
+    public String index()
+    {
+        return "***********HELLO*************";
     }
 
-//    @RequestMapping(value = "/add")
-//    public void userAdd(@RequestParam("id") int id,@RequestParam("name") String name,@RequestParam("password") String password)
-//    {
-        //添加人员
-//        User user=new User();
-//        user.setId(id);
-//        user.setName(name);
-//        user.setPassword(password);
-//        UserRespositoty.save(user);
-//    }
-//    @RequestMapping(value = "/delete")
-//    public  void  userDelete(@PathVariable("id") int id)
- //   {
-//        //删除人员
-//        UserRespositoty.delete(Long.valueOf(id));
-//   }
-    @RequestMapping(value = "/show")
+    @RequestMapping(value = "/updataUser",method = RequestMethod.POST)
     @ResponseBody
-    public String show(@RequestParam(value = "name")String name){
-        //展示人员
+    public String userUpdata(@RequestBody User userNew)
+    {
+        //更新人员
+        if(userNew != null){
+        User userold = userRepositoty.findByUserId(userNew.getId());
+        userold.setName(userNew.getName());
+        userRepositoty.save(userold);
+        return "更新成功"+userNew.getId()+userold.getName();
+        }
+        return "空对象";
+    }
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @ResponseBody
+    public void userAdd(@RequestParam("id") int id,@RequestParam("name") String name,@RequestParam("password") String password)
+    {
+        //添加人员
+        User userin=new User(id,name,password);
+        userRepositoty.save(userin);
+    }
+
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public  String   userDelete( int id)
+    {
+        //删除人员
+        userRepositoty.delete(id);
+        return "删除成功";
+    }
+
+
+    @RequestMapping(value = "/show",method = RequestMethod.GET)
+    @ResponseBody
+    public String showByName(@RequestParam(value = "name")String name)
+    {
+        //查询人员
         User user = userService.findUserByName(name);
         if(null != user)
             return user.getId()+"/"+user.getName()+"/"+user.getPassword();
-        else return "null";
+        else return "无人员";
+    }
+    @RequestMapping(value = "/show",method = RequestMethod.GET)
+    @ResponseBody
+    public String showById(@RequestParam(value = "id")int id)
+    {
+        //查询人员
+        User user = userService.findUserById(id);
+        if(null != user)
+            return user.getId()+"/"+user.getName()+"/"+user.getPassword();
+        else return "无人员";
     }
 }
